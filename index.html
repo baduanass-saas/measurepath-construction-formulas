@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MeasurePath Construction Takeoff & Architectural Formulas Documentation</title>
+  <meta name="description" content="Open-source architectural takeoff formulas, math models, and material spread rates powering MeasurePath. 100% client-side zero-telemetry construction algorithms.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://kavorylab.github.io/measurepath-construction-formulas/">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="MeasurePath Engineering">
+  <meta property="og:title" content="MeasurePath Construction Takeoff & Architectural Formulas Documentation">
+  <meta property="og:description" content="Open-source architectural takeoff formulas, math models, and material spread rates powering MeasurePath. 100% client-side zero-telemetry construction algorithms.">
+  <meta property="og:url" content="https://kavorylab.github.io/measurepath-construction-formulas/">
+  <meta property="og:image" content="https://getcoatpath.com/assets/coatpath-social.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MeasurePath Construction Takeoff & Architectural Formulas Documentation">
+  <meta name="twitter:description" content="Open-source architectural takeoff formulas, math models, and material spread rates powering MeasurePath. 100% client-side zero-telemetry construction algorithms.">
+  <meta name="twitter:image" content="https://getcoatpath.com/assets/coatpath-social.png">
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://getcoatpath.com/favicon-96.png" type="image/png" sizes="96x96">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "MeasurePath Construction Takeoff & Architectural Formulas Documentation",
+    "description": "Comprehensive mathematical formulas and specifications for construction takeoff, paint spread rates, concrete volume, drywall sheets, and roof pitch multipliers.",
+    "author": {
+      "@type": "Person",
+      "name": "Anass Badu"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Kavory Labs",
+      "url": "https://getcoatpath.com/about/",
+      "sameAs": [
+        "https://www.youtube.com/@KavoryLabs-d6u",
+        "https://x.com/kavorylab",
+        "https://www.pinterest.com/MeasurePath/",
+        "https://www.instagram.com/kavorylabs/",
+        "https://www.tiktok.com/@kavorylabs",
+        "https://dev.to/kavorylabs"
+      ]
+    },
+    "about": {
+      "@type": "WebApplication",
+      "name": "MeasurePath",
+      "url": "https://getcoatpath.com/"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --mp-green: #254f42;
+      --mp-green-dark: #1b3a31;
+      --mp-green-light: #e8f0ec;
+      --mp-ink: #1b201d;
+      --mp-surface: #f8faf9;
+      --mp-card: #ffffff;
+      --mp-border: #dfe6e2;
+      --mp-muted: #555e58;
+      --mp-accent: #2c5e50;
+      --mp-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --mp-font-mono: "SF Mono", Menlo, Consolas, Monaco, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--mp-font-sans);
+      color: var(--mp-ink);
+      background-color: var(--mp-surface);
+      line-height: 1.65;
+      padding: 0;
+    }
+
+    header.top-header {
+      background: var(--mp-card);
+      border-bottom: 1px solid var(--mp-border);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--mp-green);
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .brand-tag {
+      font-family: var(--mp-font-mono);
+      font-size: 0.75rem;
+      background: var(--mp-green-light);
+      color: var(--mp-green);
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid #c2d6cc;
+    }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--mp-green);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s ease;
+    }
+    .nav-cta:hover {
+      background: var(--mp-green-dark);
+    }
+
+    main.container {
+      max-width: 1040px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .hero-banner {
+      background: var(--mp-card);
+      border: 1px solid var(--mp-border);
+      border-radius: 6px;
+      padding: 36px 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 1px 3px rgba(37,79,66,0.04);
+    }
+    .hero-banner h1 {
+      font-size: 2.1rem;
+      color: var(--mp-green);
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+    .hero-banner p.lead {
+      font-size: 1.15rem;
+      color: var(--mp-muted);
+      margin-bottom: 20px;
+      max-width: 850px;
+    }
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .hero-pill {
+      font-family: var(--mp-font-mono);
+      font-size: 0.85rem;
+      background: var(--mp-surface);
+      border: 1px solid var(--mp-border);
+      color: var(--mp-ink);
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .hero-pill:hover {
+      border-color: var(--mp-green);
+      color: var(--mp-green);
+      background: #fff;
+    }
+
+    section.formula-card {
+      background: var(--mp-card);
+      border: 1px solid var(--mp-border);
+      border-radius: 6px;
+      padding: 28px 30px;
+      margin-bottom: 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    section.formula-card h2 {
+      font-size: 1.45rem;
+      color: var(--mp-green);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    section.formula-card h2 .sec-num {
+      font-family: var(--mp-font-mono);
+      font-size: 0.95rem;
+      color: var(--mp-muted);
+    }
+    section.formula-card p {
+      color: var(--mp-ink);
+      margin-bottom: 16px;
+    }
+
+    .math-box {
+      background: var(--mp-surface);
+      border-left: 4px solid var(--mp-green);
+      border: 1px solid var(--mp-border);
+      border-left-width: 4px;
+      border-radius: 4px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-family: var(--mp-font-mono);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .math-box strong {
+      color: var(--mp-green);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 18px 0;
+      border: 1px solid var(--mp-border);
+      border-radius: 4px;
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      font-variant-numeric: tabular-nums;
+    }
+    th, td {
+      padding: 10px 14px;
+      border: 1px solid var(--mp-border);
+      text-align: left;
+    }
+    th {
+      background: var(--mp-surface);
+      font-weight: 600;
+      color: var(--mp-green);
+    }
+    tr:nth-child(even) td {
+      background: #fbfdfc;
+    }
+
+    .dofollow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+    .dofollow-card {
+      background: var(--mp-card);
+      border: 1px solid var(--mp-border);
+      border-radius: 6px;
+      padding: 16px 18px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.15s ease;
+    }
+    .dofollow-card:hover {
+      border-color: var(--mp-green);
+      box-shadow: 0 2px 6px rgba(37,79,66,0.08);
+      transform: translateY(-1px);
+    }
+    .dofollow-card strong {
+      color: var(--mp-green);
+      font-size: 1rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .dofollow-card span {
+      font-size: 0.85rem;
+      color: var(--mp-muted);
+      line-height: 1.4;
+    }
+
+    .article-card {
+      background: var(--mp-surface);
+      border: 1px solid var(--mp-border);
+      border-radius: 6px;
+      padding: 20px;
+      margin: 12px 0;
+    }
+    .article-card h3 {
+      font-size: 1.15rem;
+      color: var(--mp-green);
+      margin-bottom: 6px;
+    }
+    .article-card h3 a {
+      color: var(--mp-green);
+      text-decoration: none;
+    }
+    .article-card h3 a:hover {
+      text-decoration: underline;
+    }
+    .article-card p {
+      font-size: 0.92rem;
+      color: var(--mp-muted);
+      margin-bottom: 8px;
+    }
+
+    footer.page-footer {
+      background: var(--mp-card);
+      border-top: 1px solid var(--mp-border);
+      padding: 30px 20px;
+      text-align: center;
+      margin-top: 60px;
+      font-size: 0.9rem;
+      color: var(--mp-muted);
+    }
+    footer.page-footer a {
+      color: var(--mp-green);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    footer.page-footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="top-header">
+    <div class="header-inner">
+      <a href="https://getcoatpath.com/" class="brand-link">
+        <span>MeasurePath</span>
+        <span class="brand-tag">Open-Source Formulas</span>
+      </a>
+      <a href="https://getcoatpath.com/studio/" class="nav-cta">
+        Open 2D/3D Studio &rarr;
+      </a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-banner">
+      <h1>Architectural &amp; Construction Takeoff Formulas</h1>
+      <p class="lead">Open-source documentation of the client-side mathematical algorithms, Boolean geometry engines, and ASTM material yield benchmarks powering MeasurePath.</p>
+      <div class="hero-links">
+        <a href="https://getcoatpath.com/" class="hero-pill">MeasurePath Home &rarr;</a>
+        <a href="https://getcoatpath.com/studio/" class="hero-pill">2D/3D Measurement Studio &rarr;</a>
+        <a href="https://getcoatpath.com/calculators/" class="hero-pill">All 19 Calculators &rarr;</a>
+        <a href="#articles" class="hero-pill">Technical Case Studies &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Formula 1 -->
+    <section class="formula-card" id="floor-wall-engine">
+      <h2><span class="sec-num">01.</span> 2D Boolean Floor &amp; Wall Grid Engine</h2>
+      <p>The core spatial layout engine handles rectangular, L-shaped, and custom room polygons by calculating gross wall perimeters and applying Boolean geometric subtractions for architectural doors and windows.</p>
+      <div class="math-box">
+        <div><strong>Gross Wall Area:</strong> 2 &times; (Length + Width) &times; Ceiling Height</div>
+        <div><strong>Net Paintable Area:</strong> Gross Wall Area &minus; &sum;(Door Deductions + Window Deductions)</div>
+        <div><strong>Ceiling Area:</strong> Length &times; Width</div>
+      </div>
+      <p>Standard architectural deductions: <strong>21 sq ft (1.95 m&sup2;)</strong> per standard 3&times;7 ft interior door; <strong>12 to 15 sq ft (1.11 to 1.39 m&sup2;)</strong> per window. Test this engine live in the <a href="https://getcoatpath.com/paint-calculator/" style="color:var(--mp-green); font-weight:600;">Room Paint &amp; Primer Calculator &rarr;</a> or model your walls in real time in the <a href="https://getcoatpath.com/studio/" style="color:var(--mp-green); font-weight:600;">2D/3D Takeoff Studio &rarr;</a>.</p>
+    </section>
+
+    <!-- Formula 2 -->
+    <section class="formula-card" id="roof-pitch">
+      <h2><span class="sec-num">02.</span> Roof Pitch &amp; Slope Multiplier Formula</h2>
+      <p>Converts a 2D building footprint area into true 3D sloping roof deck area for asphalt shingles, metal panels, and underlayment rolls using Pythagorean rafter slope geometry.</p>
+      <div class="math-box">
+        <div><strong>Pitch Ratio:</strong> Rise &divide; Run (standardized to X : 12)</div>
+        <div><strong>Pitch Multiplier:</strong> &radic;(1 + (Rise &divide; Run)&sup2;)</div>
+        <div><strong>Pitch Angle (&theta;):</strong> arctan(Rise &divide; Run) &times; (180 &divide; &pi;)</div>
+        <div><strong>Slope Gradient (%):</strong> (Rise &divide; Run) &times; 100</div>
+        <div><strong>True Roof Surface:</strong> Flat Footprint Area &times; Pitch Multiplier</div>
+      </div>
+      
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Pitch</th>
+              <th>Pitch Angle (&theta;)</th>
+              <th>Slope (%)</th>
+              <th>Multiplier</th>
+              <th>Takeoff for 1,000 sq ft Footprint</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>3/12</strong></td><td>14.04&deg;</td><td>25.0%</td><td>1.0308</td><td>1,030.8 sq ft (10.31 squares)</td></tr>
+            <tr><td><strong>4/12</strong></td><td>18.43&deg;</td><td>33.3%</td><td>1.0541</td><td>1,054.1 sq ft (10.54 squares)</td></tr>
+            <tr><td><strong>5/12</strong></td><td>22.62&deg;</td><td>41.7%</td><td>1.0833</td><td>1,083.3 sq ft (10.83 squares)</td></tr>
+            <tr><td><strong>6/12</strong></td><td>26.57&deg;</td><td>50.0%</td><td>1.1180</td><td>1,118.0 sq ft (11.18 squares)</td></tr>
+            <tr><td><strong>8/12</strong></td><td>33.69&deg;</td><td>66.7%</td><td>1.2019</td><td>1,201.9 sq ft (12.02 squares)</td></tr>
+            <tr><td><strong>10/12</strong></td><td>39.81&deg;</td><td>83.3%</td><td>1.3017</td><td>1,301.7 sq ft (13.02 squares)</td></tr>
+            <tr><td><strong>12/12</strong></td><td>45.00&deg;</td><td>100.0%</td><td>1.4142</td><td>1,414.2 sq ft (14.14 squares)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Use our dedicated <a href="https://getcoatpath.com/roof-pitch-calculator/" style="color:var(--mp-green); font-weight:600;">Roof Pitch &amp; Slope Calculator &rarr;</a> and take your multiplier into the <a href="https://getcoatpath.com/roof-shingle-calculator/" style="color:var(--mp-green); font-weight:600;">Roof Shingle &amp; Square Calculator &rarr;</a>.</p>
+    </section>
+
+    <!-- Formula 3 -->
+    <section class="formula-card" id="paint-coverage">
+      <h2><span class="sec-num">03.</span> 1 Quart vs. 1 Gallon Paint Coverage Rates</h2>
+      <p>Based on ASTM D5150 architectural coating spread rates on primed interior drywall:</p>
+      <div class="math-box">
+        <div><strong>Gallons Required:</strong> (Net Wall Area &divide; Spread Rate) &times; Coats &times; (1 + Waste Factor)</div>
+        <div><strong>1 US Gallon (3.785 L):</strong> 350 to 400 sq ft (32.5 to 37.2 m&sup2;) @ 1 coat | 175 to 200 sq ft @ 2 coats</div>
+        <div><strong>1 US Quart (0.946 L):</strong> 85 to 100 sq ft (7.9 to 9.3 m&sup2;) @ 1 coat | 45 to 50 sq ft @ 2 coats</div>
+        <div><strong>8 oz Sample Jar (0.237 L):</strong> 20 to 25 sq ft (1.9 to 2.3 m&sup2;) for color swatches</div>
+      </div>
+      <p>Calculate your container sizes directly with the <a href="https://getcoatpath.com/paint-coverage-calculator/" style="color:var(--mp-green); font-weight:600;">1 Quart &amp; 1 Gallon Paint Coverage Calculator &rarr;</a> and explore primers with the <a href="https://getcoatpath.com/primer-calculator/" style="color:var(--mp-green); font-weight:600;">Primer Coverage Calculator &rarr;</a>.</p>
+    </section>
+
+    <!-- Formula 4 -->
+    <section class="formula-card" id="concrete-volume">
+      <h2><span class="sec-num">04.</span> Concrete Cubic Yards, Slab Cost &amp; Bag Yields</h2>
+      <p>Adheres to American Concrete Institute (ACI 302) volume guidelines for slabs, footings, and cylindrical sonotube piers:</p>
+      <div class="math-box">
+        <div><strong>Cubic Yards (yd&sup3;):</strong> [Length (ft) &times; Width (ft) &times; (Thickness (in) &divide; 12)] &divide; 27 &times; (1 + Waste)</div>
+        <div><strong>80 lb Concrete Bag Yield:</strong> 0.60 cu ft &rarr; 45 bags per cubic yard</div>
+        <div><strong>60 lb Concrete Bag Yield:</strong> 0.45 cu ft &rarr; 60 bags per cubic yard</div>
+        <div><strong>40 lb Concrete Bag Yield:</strong> 0.30 cu ft &rarr; 90 bags per cubic yard</div>
+        <div><strong>Complete Slab Cost:</strong> (Volume &times; Ready-Mix Price) + (Area &times; Labor/sq ft) + Prep + Rebar + Delivery</div>
+      </div>
+      <p>Estimate ready-mix and bags with the <a href="https://getcoatpath.com/concrete-calculator/" style="color:var(--mp-green); font-weight:600;">Concrete Volume &amp; Bag Calculator &rarr;</a>, plan commercial budgets in the <a href="https://getcoatpath.com/concrete-slab-cost-calculator/" style="color:var(--mp-green); font-weight:600;">Concrete Slab Cost Calculator &rarr;</a>, or size footings with the <a href="https://getcoatpath.com/sonotube-concrete-calculator/" style="color:var(--mp-green); font-weight:600;">Sonotube &amp; Post Hole Concrete Calculator &rarr;</a>.</p>
+    </section>
+
+    <!-- Formula 5 -->
+    <section class="formula-card" id="drywall-mud">
+      <h2><span class="sec-num">05.</span> Drywall Sheets, Joint Mud &amp; Fastener Takeoff</h2>
+      <p>Conforms to the Gypsum Association GA-214 standard finishing benchmarks:</p>
+      <div class="math-box">
+        <div><strong>4&times;8 ft Sheet Area:</strong> 32 sq ft (2.97 m&sup2;) | <strong>4&times;12 ft Sheet Area:</strong> 48 sq ft (4.46 m&sup2;)</div>
+        <div><strong>Level 4 Smooth Finish Mud:</strong> 0.45 US gal per 4&times;8 sheet (~1.40 gal per 100 sq ft)</div>
+        <div><strong>Level 3 Finish Mud:</strong> 0.32 US gal per sheet (~1.00 gal per 100 sq ft)</div>
+        <div><strong>Level 5 Full Skim Mud:</strong> 0.75 US gal per sheet (~2.35 gal per 100 sq ft)</div>
+        <div><strong>Joint Paper/Fiberglass Tape:</strong> 12 linear ft per 4&times;8 sheet (~37.5 lin ft per 100 sq ft)</div>
+      </div>
+      <p>Plan your boards with the <a href="https://getcoatpath.com/drywall-calculator/" style="color:var(--mp-green); font-weight:600;">Drywall Sheet Calculator &rarr;</a> and order ready-mix compound with the <a href="https://getcoatpath.com/drywall-mud-calculator/" style="color:var(--mp-green); font-weight:600;">Drywall Mud &amp; Tape Calculator &rarr;</a>.</p>
+    </section>
+
+    <!-- Formula 6 -->
+    <section class="formula-card" id="epoxy-floor">
+      <h2><span class="sec-num">06.</span> Epoxy Floor Coating &amp; Flake Broadcast Rates</h2>
+      <p>Commercial and residential epoxy resin specifications for concrete garages and basements:</p>
+      <div class="math-box">
+        <div><strong>100% Solids Commercial Epoxy:</strong> 150 to 200 sq ft/gal at 8 to 10 mils dry film thickness (DFT)</div>
+        <div><strong>Water-Based DIY Kits:</strong> 250 to 400 sq ft per kit</div>
+        <div><strong>Decorative Flake - Light Broadcast:</strong> 8 to 10 lbs per 400 sq ft garage (0.02 to 0.025 lbs/sq ft)</div>
+        <div><strong>Decorative Flake - Medium Broadcast:</strong> 20 to 25 lbs per 400 sq ft garage (0.05 to 0.06 lbs/sq ft)</div>
+        <div><strong>Decorative Flake - Full Broadcast to Rejection:</strong> 50 to 60 lbs per 400 sq ft garage (0.125 to 0.15 lbs/sq ft)</div>
+        <div><strong>Clear Protective Topcoat:</strong> 300 to 350 sq ft/gal (polyurethane or polyaspartic)</div>
+      </div>
+      <p>Size your garage kit with the <a href="https://getcoatpath.com/epoxy-floor-calculator/" style="color:var(--mp-green); font-weight:600;">Epoxy Garage Floor Calculator &rarr;</a> and protect commercial roofs with the <a href="https://getcoatpath.com/roof-coating-calculator/" style="color:var(--mp-green); font-weight:600;">Roof Coating Calculator &rarr;</a>.</p>
+    </section>
+
+    <!-- 100% Dofollow Directory -->
+    <section class="formula-card" id="calculators-directory">
+      <h2><span class="sec-num">07.</span> Complete MeasurePath Calculator Suite (100% Dofollow Links)</h2>
+      <p>Explore all 22 live interactive architectural tools, spatial estimators, and takeoff applications on MeasurePath:</p>
+
+      <div class="dofollow-grid">
+        <a href="https://getcoatpath.com/" class="dofollow-card">
+          <strong>MeasurePath Home &rarr;</strong>
+          <span>Free architectural takeoff tools and construction calculators with zero telemetry.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/studio/" class="dofollow-card">
+          <strong>2D/3D Measurement Studio &rarr;</strong>
+          <span>Interactive browser CAD for roof slopes, room walls, and flooring takeoffs.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/calculators/" class="dofollow-card">
+          <strong>All 19 Construction Calculators &rarr;</strong>
+          <span>Complete directory of our verified building material estimation tools.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/roof-pitch-calculator/" class="dofollow-card">
+          <strong>Roof Pitch, Slope &amp; Gradient Calculator &rarr;</strong>
+          <span>Convert rise and run into pitch ratios, degrees, slope %, and pitch multipliers.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/paint-calculator/" class="dofollow-card">
+          <strong>Room Paint &amp; Primer Calculator &rarr;</strong>
+          <span>Calculate wall gallons, deduct doors and windows, and get instant can counts.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/paint-coverage-calculator/" class="dofollow-card">
+          <strong>1 Quart &amp; 1 Gallon Paint Coverage Calculator &rarr;</strong>
+          <span>Compare 8 oz samples, 1-quart cans, and 1-gallon buckets for 1 and 2 coats.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/concrete-slab-cost-calculator/" class="dofollow-card">
+          <strong>Concrete Slab Cost Calculator &rarr;</strong>
+          <span>Estimate total project budgets with ready-mix material, labor, and site prep.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/concrete-calculator/" class="dofollow-card">
+          <strong>Concrete Volume &amp; Bag Calculator &rarr;</strong>
+          <span>Calculate cubic yards and 40/60/80 lb bags for slabs, footings, and walls.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/epoxy-floor-calculator/" class="dofollow-card">
+          <strong>Epoxy Garage Floor Calculator &rarr;</strong>
+          <span>Calculate 2-part epoxy resin, broadcast color flakes, and clear topcoat kits.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/roof-coating-calculator/" class="dofollow-card">
+          <strong>Roof Coating Cost &amp; Gallon Calculator &rarr;</strong>
+          <span>Estimate elastomeric and silicone roof coating pails and slope coverage.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/drywall-calculator/" class="dofollow-card">
+          <strong>Drywall Sheet Calculator &rarr;</strong>
+          <span>Calculate 4&times;8 and 4&times;12 sheet counts, room gross area, and waste allowance.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/drywall-mud-calculator/" class="dofollow-card">
+          <strong>Drywall Mud &amp; Tape Calculator &rarr;</strong>
+          <span>Estimate joint compound boxes and tape rolls for Level 3, 4, and 5 finishes.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/flooring-calculator/" class="dofollow-card">
+          <strong>Flooring &amp; Carton Calculator &rarr;</strong>
+          <span>Calculate hardwood, laminate, vinyl plank, and tile box counts with waste factor.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/primer-calculator/" class="dofollow-card">
+          <strong>Primer Coverage Calculator &rarr;</strong>
+          <span>Calculate drywall, bare wood, and stain-blocking primer gallons for raw surfaces.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/ceiling-paint-calculator/" class="dofollow-card">
+          <strong>Ceiling Paint Calculator &rarr;</strong>
+          <span>Estimate flat ceiling paint gallons, cut-in perimeter, and square footage.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/exterior-paint-calculator/" class="dofollow-card">
+          <strong>Exterior Paint Calculator &rarr;</strong>
+          <span>Calculate exterior siding, gable walls, fascia, and trim paint requirements.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/interior-painting-cost-calculator/" class="dofollow-card">
+          <strong>Interior Painting Cost Calculator &rarr;</strong>
+          <span>Estimate professional painter labor, DIY materials, and room pricing.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/roof-shingle-calculator/" class="dofollow-card">
+          <strong>Roof Shingle &amp; Square Calculator &rarr;</strong>
+          <span>Estimate roofing squares, 3-tab and architectural shingle bundles, and underlayment.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/gravel-calculator/" class="dofollow-card">
+          <strong>Gravel &amp; Crushed Stone Calculator &rarr;</strong>
+          <span>Calculate gravel tons, cubic yards, and compacted base material for driveways.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/sonotube-concrete-calculator/" class="dofollow-card">
+          <strong>Sonotube &amp; Post Hole Concrete Calculator &rarr;</strong>
+          <span>Size cylindrical concrete post holes, fence piers, and deck footings.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/deck-stain-calculator/" class="dofollow-card">
+          <strong>Deck &amp; Fence Stain Calculator &rarr;</strong>
+          <span>Estimate semi-transparent and solid deck stain gallons for boards and railings.</span>
+        </a>
+
+        <a href="https://getcoatpath.com/construction-estimate-generator/" class="dofollow-card">
+          <strong>Free Construction Estimate Generator &rarr;</strong>
+          <span>Build professional contractor quotes with editable line items and PDF export.</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Technical Case Studies -->
+    <section class="formula-card" id="articles">
+      <h2><span class="sec-num">08.</span> Technical Case Studies &amp; Engineering Articles</h2>
+      <p>Read our technical deep dives on building high-performance, privacy-first web utilities:</p>
+
+      <div class="article-card">
+        <h3><a href="https://dev.to/kavorylabs/building-measurepath-a-zero-telemetry-2d-3d-construction-studio-calculator-toolkit-in-pure-js">Building MeasurePath: A Zero-Telemetry 2D/3D Construction Studio &amp; Calculator Toolkit in Pure JS &rarr;</a></h3>
+        <p>Published on <strong>Dev.to</strong> by Kavory Labs. A comprehensive architectural analysis covering pure browser geometry evaluation, client-side Three.js spatial modeling, localStorage snapshots, and building zero-telemetry software without ad-tech trackers.</p>
+      </div>
+
+      <div class="article-card">
+        <h3><a href="https://medium.com/@kavorylabs/building-measurepath-a-zero-telemetry-2d-3d-construction-studio-calculator-toolkit-in-pure-js">Building MeasurePath: A Zero-Telemetry 2D/3D Construction Studio &amp; Calculator Toolkit in Pure JS (Medium) &rarr;</a></h3>
+        <p>Published on <strong>Medium</strong>. Detailed engineering breakdown of our construction estimation engine, client-side session transfer protocols, and ASTM formula standards.</p>
+      </div>
+
+      <div class="article-card">
+        <h3><a href="https://getcoatpath.com/about/">About Kavory Labs &amp; MeasurePath &rarr;</a></h3>
+        <p>Founded by Anass Badu, Kavory Labs is an independent software studio creating fast, privacy-respecting estimation tools and spatial web software for contractors and homeowners.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>MeasurePath Open-Source Formulas &bull; Maintained by <a href="https://getcoatpath.com/about/">Kavory Labs</a> &bull; Licensed under the MIT License.</p>
+    <p style="margin-top: 8px;">Explore the live toolkit at <a href="https://getcoatpath.com/">getcoatpath.com</a></p>
+  </footer>
+
+</body>
+</html>
